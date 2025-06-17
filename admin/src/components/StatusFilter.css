@@ -1,0 +1,88 @@
+.status-filter {
+  margin-bottom: 1rem;
+}
+
+.filter-title {
+  color: #3730a3;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  font-size: 0.97rem;
+  font-weight: 500;
+  color: #3730a3;
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+}
+
+.filter-btn:hover {
+  background: #eef2ff;
+}
+
+.filter-btn.active {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+.filter-btn.active:hover {
+  background: #4f46e5;
+}
+
+.count-badge {
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 0.2rem 0.7rem;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.filter-btn.active .count-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .filter-buttons {
+    flex-wrap: nowrap;
+  }
+
+  .filter-btn {
+    flex: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-btn {
+    flex-direction: column;
+    min-height: 70px;
+    width: calc(50% - 0.25rem);
+  }
+
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}

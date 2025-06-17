@@ -1,0 +1,26 @@
+.issue-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.no-issues {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  background: #f1f5f9;
+  border-radius: 0.75rem;
+  border: 2px dashed #c7d2fe;
+  color: #6366f1;
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+}
+
+.no-issues p {
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+.no-issues p:first-child {
+  font-weight: 600;
+  color: #3730a3;
+}
