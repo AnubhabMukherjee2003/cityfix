@@ -56,8 +56,8 @@
   font-size: 0.95rem;
   color: #6b7280;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.2rem;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .meta-label {
@@ -77,4 +77,32 @@
     flex-direction: column;
     gap: 0.5rem;
   }
+}
+
+/* Image and coordinates styles */
+.issue-image {
+  margin-bottom: 1rem;
+}
+
+.issue-photo {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.issue-location,
+.issue-date,
+.issue-reporter {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.coordinates {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-family: 'Courier New', monospace;
+  margin-left: 0.5rem;
 }

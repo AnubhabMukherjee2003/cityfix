@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const issuesRouter = require('./routes/issues');
+const authRouter = require('./routes/auth');
+const noticesRouter = require('./routes/notices');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,7 +19,11 @@ mongoose.connect(mongoUri).then(() => {
   console.error('MongoDB connection error:', err);
 });
 
+// Routes
+app.use('/api/auth', authRouter);
 app.use('/api/issues', issuesRouter);
+app.use('/api/notices', noticesRouter);
+
 app.get('/', (req, res) => {
   res.json({ message: 'CityFix API Server' });
 });

@@ -1,46 +1,56 @@
 import { useState, useEffect } from 'react';
-import { issueAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import IssueForm from './IssueForm';
 import IssueList from './IssueList';
+import IssueMap from './IssueMap';
+import NoticeList from './NoticeList';
 import './Dashboard.css';
 
 function Dashboard() {
-  const [issues, setIssues] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [activeTab, setActiveTab] = useState('issues');
+  const { 
+    user, 
+    issues, 
+    loading, 
+    error, 
+    fetchIssues, 
+    createIssue, 
+    fetchNotices,
+    clearError 
+  } = useAuth();
 
   useEffect(() => {
     fetchIssues();
-  }, []);
+    fetchNotices();
+  }, [fetchIssues, fetchNotices]);
 
-  const fetchIssues = async () => {
-    try {
-      setLoading(true);
-      const response = await issueAPI.getAllIssues();
-      setIssues(response.data);
-      setError(null);
-    } catch (err) {
-      setError('Failed to fetch issues. Please try again.');
-      console.error('Error fetching issues:', err);
-    } finally {
-      setLoading(false);
+  const handleIssueCreated = async (issueData) => {
+    const result = await createIssue(issueData);
+    if (result.success) {
+      setShowForm(false);
+      // Issues are automatically updated via context
     }
-  };
-
-  const handleIssueCreated = (newIssue) => {
-    setIssues(prevIssues => [newIssue, ...prevIssues]);
-    setShowForm(false);
+    return result;
   };
 
   if (loading) {
-    return <div className="loading">Loading issues...</div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading dashboard...</p>
+      </div>
+    );
   }
 
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1>Issue Dashboard</h1>
+        <div className="welcome-section">
+          <h1>Welcome back, {user?.username}!</h1>
+          <p>Manage community issues and stay updated with notices</p>
+        </div>
+        
         <button 
           className="btn btn-primary"
           onClick={() => setShowForm(!showForm)}
@@ -52,9 +62,12 @@ function Dashboard() {
       {error && (
         <div className="error-message">
           {error}
-          <button onClick={fetchIssues} className="retry-btn">Retry</button>
+          <button onClick={clearError} className="close-btn">×</button>
         </div>
       )}
+
+      {/* Notice Section */}
+      <NoticeList />
 
       {showForm && (
         <div className="form-container">
@@ -66,8 +79,43 @@ function Dashboard() {
       )}
 
       <div className="issues-section">
-        <h2>Recent Issues ({issues.length})</h2>
-        <IssueList issues={issues} />
+        <div className="section-header">
+          <h2>Community Issues</h2>
+          <div className="view-tabs">
+            <button 
+              className={`tab-btn ${activeTab === 'issues' ? 'active' : ''}`}
+              onClick={() => setActiveTab('issues')}
+            >
+              📋 List View
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'map' ? 'active' : ''}`}
+              onClick={() => setActiveTab('map')}
+            >
+              🗺️ Map View
+            </button>
+          </div>
+          <div className="issue-stats">
+            <span className="stat">
+              <strong>{issues.length}</strong> Total Issues
+            </span>
+            <span className="stat">
+              <strong>{issues.filter(issue => issue.status === 'New').length}</strong> New
+            </span>
+            <span className="stat">
+              <strong>{issues.filter(issue => issue.status === 'In Progress').length}</strong> In Progress
+            </span>
+            <span className="stat">
+              <strong>{issues.filter(issue => issue.status === 'Resolved').length}</strong> Resolved
+            </span>
+          </div>
+        </div>
+        
+        {activeTab === 'issues' ? (
+          <IssueList issues={issues} />
+        ) : (
+          <IssueMap />
+        )}
       </div>
     </div>
   );

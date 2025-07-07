@@ -9,18 +9,55 @@ const api = axios.create({
   },
 });
 
+// Add token to requests if available
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Handle auth errors globally
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const issueAPI = {
-  // Get all issues
+  // Authentication
+  login: (email, password) => api.post('/auth/login', { email, password }),
+  signup: (username, email, password) => api.post('/auth/signup', { username, email, password }),
+
+  // Issues
   getAllIssues: () => api.get('/issues'),
-  
-  // Get single issue
   getIssue: (id) => api.get(`/issues/${id}`),
-  
-  // Create new issue
-  createIssue: (issueData) => api.post('/issues', issueData),
-  
-  // Update issue status
+  createIssue: (issueData) => {
+    // If issueData is FormData, we need to handle headers differently
+    if (issueData instanceof FormData) {
+      return api.post('/issues', issueData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    }
+    return api.post('/issues', issueData);
+  },
   updateIssueStatus: (id, status) => api.patch(`/issues/${id}`, { status }),
+
+  // Notices
+  getNotices: () => api.get('/notices'),
+  getAllNotices: () => api.get('/notices/all'),
+  createNotice: (noticeData) => api.post('/notices', noticeData),
+  updateNotice: (id, noticeData) => api.put(`/notices/${id}`, noticeData),
+  deleteNotice: (id) => api.delete(`/notices/${id}`),
 };
 
 export default api;

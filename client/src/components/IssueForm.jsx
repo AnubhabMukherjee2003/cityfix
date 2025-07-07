@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { issueAPI } from '../services/api';
+import MapSelector from './MapSelector';
 import './IssueForm.css';
 
 function IssueForm({ onIssueCreated, onCancel }) {
@@ -8,6 +8,8 @@ function IssueForm({ onIssueCreated, onCancel }) {
     description: '',
     location: ''
   });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -16,6 +18,34 @@ function IssueForm({ onIssueCreated, onCancel }) {
       ...formData,
       [e.target.name]: e.target.value
     });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image size must be less than 5MB');
+        return;
+      }
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setError('Please select a valid image file');
+        return;
+      }
+      setSelectedFile(file);
+      setError(null);
+    }
+  };
+
+  const handleLocationSelect = (location) => {
+    setSelectedLocation(location);
+    if (location.address) {
+      setFormData({
+        ...formData,
+        location: location.address
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -29,9 +59,36 @@ function IssueForm({ onIssueCreated, onCancel }) {
     try {
       setLoading(true);
       setError(null);
-      const response = await issueAPI.createIssue(formData);
-      onIssueCreated(response.data);
-      setFormData({ title: '', description: '', location: '' });
+      
+      // Create FormData for file upload
+      const submitData = new FormData();
+      submitData.append('title', formData.title);
+      submitData.append('description', formData.description);
+      submitData.append('location', formData.location);
+      
+      // Add coordinates if selected from map
+      if (selectedLocation) {
+        submitData.append('latitude', selectedLocation.latitude);
+        submitData.append('longitude', selectedLocation.longitude);
+      }
+      
+      // Add image if selected
+      if (selectedFile) {
+        submitData.append('image', selectedFile);
+      }
+      
+      const result = await onIssueCreated(submitData);
+      
+      if (result.success) {
+        setFormData({ title: '', description: '', location: '' });
+        setSelectedFile(null);
+        setSelectedLocation(null);
+        // Reset file input
+        const fileInput = document.getElementById('image');
+        if (fileInput) fileInput.value = '';
+      } else {
+        setError(result.error || 'Failed to create issue. Please try again.');
+      }
     } catch (err) {
       setError('Failed to create issue. Please try again.');
       console.error('Error creating issue:', err);
@@ -88,6 +145,32 @@ function IssueForm({ onIssueCreated, onCancel }) {
             placeholder="Where is this issue located?"
             required
           />
+        </div>
+
+        <div className="form-group">
+          <label>Select Location on Map</label>
+          <MapSelector onLocationSelect={handleLocationSelect} />
+          {selectedLocation && (
+            <p className="location-info">
+              Selected: {selectedLocation.latitude.toFixed(6)}, {selectedLocation.longitude.toFixed(6)}
+            </p>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="image">Upload Image (Optional)</label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+          {selectedFile && (
+            <p className="file-info">
+              Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+            </p>
+          )}
         </div>
 
         <div className="form-actions">
