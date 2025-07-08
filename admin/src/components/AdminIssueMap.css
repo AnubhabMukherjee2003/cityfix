@@ -1,26 +1,33 @@
+/* Modern map container and header */
 .admin-issue-map-container {
-  background: #fff;
-  border-radius: 0.75rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
   overflow: hidden;
   margin-bottom: 2rem;
 }
 
 .admin-map-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem 2rem;
+  border-bottom: 1.5px solid var(--border-color);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 1rem;
-  background: #f8fafc;
+  gap: 1.2rem;
 }
 
 .admin-map-header h2 {
-  color: #3730a3;
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
   margin: 0;
 }
 
@@ -34,23 +41,26 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.875rem;
-  color: #6b7280;
-  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 600;
 }
 
 .legend-marker {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   border: 2px solid white;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 
 .no-admin-map-data {
   padding: 4rem 2rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--text-secondary);
+  background: var(--light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .no-admin-map-data p {
@@ -59,8 +69,8 @@
 }
 
 .no-admin-map-data small {
-  font-size: 0.9rem;
-  color: #9ca3af;
+  font-size: 0.95rem;
+  color: var(--text-light);
 }
 
 .admin-map-wrapper {
@@ -70,11 +80,17 @@
 .leaflet-container {
   height: 100%;
   font-family: inherit;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
 }
 
 /* Admin popup styles */
 .admin-issue-popup {
   min-width: 300px;
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.2rem 1rem;
 }
 
 .admin-popup-header {
@@ -86,9 +102,12 @@
 }
 
 .admin-popup-title {
-  color: #3730a3;
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0;
   flex: 1;
 }
@@ -98,10 +117,9 @@
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 1rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  white-space: nowrap;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--primary);
 }
 
 .admin-popup-description {

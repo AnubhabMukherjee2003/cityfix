@@ -1,88 +1,261 @@
+/* Modern status filter styling */
 .status-filter {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.status-filter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--gradient-primary);
 }
 
 .filter-title {
-  color: #3730a3;
-  margin-bottom: 1rem;
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-title::before {
+  content: '🔍';
   font-size: 1.1rem;
-  font-weight: 600;
+  filter: grayscale(100%) opacity(0.8);
 }
 
 .filter-buttons {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
 }
 
 .filter-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1rem;
-  border: 1px solid #d1d5db;
-  background: #fff;
-  border-radius: 2rem;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border: 1.5px solid var(--border-color);
+  background: var(--light);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, border 0.2s;
-  font-size: 0.97rem;
-  font-weight: 500;
-  color: #3730a3;
-  flex: 1;
-  min-width: 120px;
+  transition: var(--transition-base);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  position: relative;
+  overflow: hidden;
   text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.5s;
 }
 
 .filter-btn:hover {
-  background: #eef2ff;
+  background: var(--card-bg);
+  color: var(--primary);
+  border-color: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.filter-btn:hover::before {
+  left: 100%;
 }
 
 .filter-btn.active {
-  background: #6366f1;
-  color: #fff;
-  border-color: #6366f1;
+  background: var(--gradient-primary);
+  color: white;
+  border-color: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
 }
 
 .filter-btn.active:hover {
-  background: #4f46e5;
+  box-shadow: var(--shadow-xl);
 }
 
 .count-badge {
-  background: #e0e7ff;
-  color: #3730a3;
-  padding: 0.2rem 0.7rem;
-  border-radius: 1rem;
-  font-size: 0.85rem;
-  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-secondary);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  box-shadow: var(--shadow-sm);
 }
 
 .filter-btn.active .count-badge {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive adjustments */
-@media (min-width: 768px) {
-  .filter-buttons {
-    flex-wrap: nowrap;
-  }
+/* Status-specific styling for better visual hierarchy */
+.filter-btn[data-status="new"] {
+  border-left: 4px solid var(--primary);
+}
 
+.filter-btn[data-status="progress"] {
+  border-left: 4px solid var(--warning);
+}
+
+.filter-btn[data-status="resolved"] {
+  border-left: 4px solid var(--success);
+}
+
+.filter-btn[data-status="all"] {
+  border-left: 4px solid var(--dark);
+}
+
+/* Interactive animations */
+@keyframes filterPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.filter-btn.loading {
+  animation: filterPulse 1.5s infinite;
+  pointer-events: none;
+}
+
+/* Enhanced visual feedback */
+.filter-btn:active {
+  transform: translateY(-1px);
+}
+
+.filter-btn.active::after {
+  content: '✓';
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* Improved accessibility and focus states */
+.filter-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Loading spinner for filter updates */
+.filter-btn.loading::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (min-width: 1024px) {
+  .filter-buttons {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .filter-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .status-filter {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .filter-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .filter-buttons {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
   .filter-btn {
-    flex: auto;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.9rem;
+  }
+  
+  .count-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
   }
 }
 
 @media (max-width: 480px) {
-  .filter-btn {
-    flex-direction: column;
-    min-height: 70px;
-    width: calc(50% - 0.25rem);
-  }
-
   .filter-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  
+  .filter-btn {
+    padding: 0.75rem 1rem;
+    min-height: 60px;
+  }
+  
+  .filter-title::before {
+    display: none;
+  }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .status-filter {
+    background: var(--dark-800, #1f2937);
+    border-color: var(--dark-600, #4b5563);
+  }
+  
+  .filter-btn {
+    background: var(--dark-600, #4b5563);
+    color: var(--text-light, #94a3b8);
+    border-color: var(--dark-600, #4b5563);
+  }
+  
+  .filter-btn:hover {
+    background: var(--dark, #1e293b);
   }
 }

@@ -8,13 +8,15 @@
 }
 
 .admin-login-card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-  padding: 40px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1.5px solid var(--border-color);
+  padding: 3rem 2.5rem;
+  margin: 2rem 0;
+  transition: var(--transition-base);
   width: 100%;
   max-width: 420px;
-  border: 2px solid #e5e7eb;
 }
 
 .admin-login-header {
@@ -23,10 +25,13 @@
 }
 
 .admin-login-header h2 {
-  color: #1f2937;
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 8px;
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
 }
 
 .admin-login-header p {
@@ -54,71 +59,50 @@
 }
 
 .form-group input {
-  padding: 14px 16px;
-  border: 2px solid #d1d5db;
-  border-radius: 10px;
-  font-size: 16px;
-  transition: all 0.2s ease;
-  background: #f9fafb;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.2rem;
+  font-size: 1rem;
+  background: var(--light);
+  transition: var(--transition-base);
+  font-family: inherit;
+  box-shadow: var(--shadow-sm);
 }
 
 .form-group input:focus {
+  border-color: var(--primary);
   outline: none;
-  border-color: #3730a3;
-  box-shadow: 0 0 0 3px rgba(55, 48, 163, 0.1);
-  background: white;
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.12);
+  background: #fff;
 }
 
 .error-message {
-  background: #fef2f2;
-  color: #dc2626;
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px solid #fecaca;
-  font-size: 14px;
-  text-align: center;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  padding: 0.9rem 1.2rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  font-size: 0.97rem;
   font-weight: 500;
+  border-left: 4px solid #ef4444;
 }
 
 .admin-login-btn {
-  background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #7c3aed 100%);
+  background: var(--gradient-primary);
   color: white;
-  border: none;
-  padding: 16px 24px;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 10px;
-  position: relative;
-  overflow: hidden;
+  border-radius: var(--radius-full);
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-md);
+  padding: 1rem 2.2rem;
+  margin-top: 1.2rem;
+  transition: var(--transition-base);
 }
 
-.admin-login-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.admin-login-btn:hover:not(:disabled)::before {
-  left: 100%;
-}
-
-.admin-login-btn:hover:not(:disabled) {
+.admin-login-btn:hover {
+  box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
-  box-shadow: 0 15px 30px rgba(55, 48, 163, 0.4);
-}
-
-.admin-login-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
+  background: var(--primary-dark);
 }
 
 .admin-login-footer {
