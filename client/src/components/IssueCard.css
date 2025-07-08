@@ -69,6 +69,28 @@
   color: #22223b;
 }
 
+/* Image and coordinates styles */
+.issue-image {
+  margin-bottom: 1rem;
+}
+
+.issue-photo {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.coordinates {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-family: 'Courier New', monospace;
+  margin-left: 0.5rem;
+  display: block;
+  margin-top: 0.25rem;
+}
+
 @media (max-width: 600px) {
   .issue-card {
     padding: 1rem 0.5rem;

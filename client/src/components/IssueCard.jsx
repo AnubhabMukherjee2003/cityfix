@@ -33,10 +33,25 @@ function IssueCard({ issue }) {
       
       <p className="issue-description">{issue.description}</p>
       
+      {issue.imageUrl && (
+        <div className="issue-image">
+          <img 
+            src={issue.imageUrl} 
+            alt={issue.title}
+            className="issue-photo"
+          />
+        </div>
+      )}
+      
       <div className="issue-meta">
         <div className="issue-location">
           <span className="meta-label">📍 Location:</span>
           <span className="meta-value">{issue.location}</span>
+          {issue.latitude && issue.longitude && (
+            <span className="coordinates">
+              ({issue.latitude.toFixed(6)}, {issue.longitude.toFixed(6)})
+            </span>
+          )}
         </div>
         <div className="issue-date">
           <span className="meta-label">🗓️ Reported:</span>
