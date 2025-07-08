@@ -73,16 +73,37 @@ function AdminIssueCard({ issue, onStatusUpdate }) {
       
       <p className="admin-issue-description">{issue.description}</p>
       
+      {issue.imageUrl && (
+        <div className="admin-issue-image">
+          <img 
+            src={issue.imageUrl} 
+            alt={issue.title}
+            className="admin-issue-photo"
+          />
+        </div>
+      )}
+      
       <div className="admin-issue-meta">
         <div className="meta-grid">
           <div className="meta-item">
             <span className="meta-label">📍 Location:</span>
             <span className="meta-value">{issue.location}</span>
+            {issue.latitude && issue.longitude && (
+              <span className="coordinates">
+                ({issue.latitude.toFixed(6)}, {issue.longitude.toFixed(6)})
+              </span>
+            )}
           </div>
           <div className="meta-item">
             <span className="meta-label">🕒 Reported:</span>
             <span className="meta-value">{formatDate(issue.createdAt)}</span>
           </div>
+          {issue.reportedBy && (
+            <div className="meta-item">
+              <span className="meta-label">👤 Reporter:</span>
+              <span className="meta-value">{issue.reportedBy.username}</span>
+            </div>
+          )}
           {issue.updatedAt !== issue.createdAt && (
             <div className="meta-item">
               <span className="meta-label">🔄 Last Updated:</span>

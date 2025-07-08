@@ -2,16 +2,15 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import IssueForm from './IssueForm';
 import IssueList from './IssueList';
-import IssueMap from './IssueMap';
 import NoticeList from './NoticeList';
 import './Dashboard.css';
 
 function Dashboard() {
   const [showForm, setShowForm] = useState(false);
-  const [activeTab, setActiveTab] = useState('issues');
   const { 
     user, 
     issues, 
+    notices, 
     loading, 
     error, 
     fetchIssues, 
@@ -23,7 +22,7 @@ function Dashboard() {
   useEffect(() => {
     fetchIssues();
     fetchNotices();
-  }, [fetchIssues, fetchNotices]);
+  }, []);
 
   const handleIssueCreated = async (issueData) => {
     const result = await createIssue(issueData);
@@ -81,20 +80,6 @@ function Dashboard() {
       <div className="issues-section">
         <div className="section-header">
           <h2>Community Issues</h2>
-          <div className="view-tabs">
-            <button 
-              className={`tab-btn ${activeTab === 'issues' ? 'active' : ''}`}
-              onClick={() => setActiveTab('issues')}
-            >
-              📋 List View
-            </button>
-            <button 
-              className={`tab-btn ${activeTab === 'map' ? 'active' : ''}`}
-              onClick={() => setActiveTab('map')}
-            >
-              🗺️ Map View
-            </button>
-          </div>
           <div className="issue-stats">
             <span className="stat">
               <strong>{issues.length}</strong> Total Issues
@@ -110,12 +95,7 @@ function Dashboard() {
             </span>
           </div>
         </div>
-        
-        {activeTab === 'issues' ? (
-          <IssueList issues={issues} />
-        ) : (
-          <IssueMap />
-        )}
+        <IssueList issues={issues} />
       </div>
     </div>
   );

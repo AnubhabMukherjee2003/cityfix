@@ -19,18 +19,6 @@ const IssueSchema = new mongoose.Schema({
     trim: true,
     maxlength: 200
   },
-  latitude: {
-    type: Number,
-    required: false
-  },
-  longitude: {
-    type: Number,
-    required: false
-  },
-  imageUrl: {
-    type: String,
-    required: false
-  },
   status: {
     type: String,
     enum: ['New', 'In Progress', 'Resolved'],

@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Issue = require('../models/Issue');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
-const { upload } = require('../config/cloudinary');
 
 // Get all issues (public for now, but with user info)
 router.get('/', async (req, res) => {
@@ -31,33 +30,20 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create new issue (requires authentication)
-router.post('/', authenticateToken, upload.single('image'), async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
-    const { title, description, location, latitude, longitude } = req.body;
+    const { title, description, location } = req.body;
     
     if (!title || !description || !location) {
       return res.status(400).json({ error: 'Title, description, and location are required' });
     }
 
-    const issueData = { 
+    const newIssue = new Issue({ 
       title, 
       description, 
       location,
       reportedBy: req.user._id
-    };
-
-    // Add coordinates if provided
-    if (latitude && longitude) {
-      issueData.latitude = parseFloat(latitude);
-      issueData.longitude = parseFloat(longitude);
-    }
-
-    // Add image URL if file was uploaded
-    if (req.file) {
-      issueData.imageUrl = req.file.path;
-    }
-
-    const newIssue = new Issue(issueData);
+    });
     
     await newIssue.save();
     await newIssue.populate('reportedBy', 'username');

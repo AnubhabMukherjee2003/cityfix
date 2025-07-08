@@ -112,22 +112,29 @@
   border-radius: 0.25rem;
 }
 
-.form-group input[type="file"] {
-  background: white;
-  border: 2px dashed #d1d5db;
-  padding: 1rem;
+.file-input {
+  background: white !important;
+  border: 2px dashed #d1d5db !important;
+  padding: 1rem !important;
   text-align: center;
   cursor: pointer;
   transition: border-color 0.2s;
 }
 
-.form-group input[type="file"]:hover {
-  border-color: #6366f1;
+.file-input:hover {
+  border-color: #6366f1 !important;
 }
 
-.form-group input[type="file"]:focus {
-  border-color: #6366f1;
+.file-input:focus {
+  border-color: #6366f1 !important;
   outline: none;
+}
+
+.file-help {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+  display: block;
 }
 
 /* Responsive adjustments */

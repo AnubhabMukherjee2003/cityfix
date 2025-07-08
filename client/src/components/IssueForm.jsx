@@ -165,12 +165,16 @@ function IssueForm({ onIssueCreated, onCancel }) {
             name="image"
             accept="image/*"
             onChange={handleFileChange}
+            className="file-input"
           />
           {selectedFile && (
             <p className="file-info">
               Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
             </p>
           )}
+          <small className="file-help">
+            Supported formats: JPG, PNG, GIF, WebP (Max 5MB)
+          </small>
         </div>
 
         <div className="form-actions">

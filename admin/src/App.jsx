@@ -65,13 +65,6 @@ function App() {
             <div className="admin-info">
               <div className="admin-badge">Administrator</div>
               <span className="admin-name">{adminUser.username}</span>
-              <button 
-                onClick={handleLogout} 
-                className="logout-btn"
-                title="Logout"
-              >
-                Logout
-              </button>
             </div>
           </div>
         </nav>

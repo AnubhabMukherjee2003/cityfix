@@ -39,17 +39,7 @@ export const issueAPI = {
   // Issues
   getAllIssues: () => api.get('/issues'),
   getIssue: (id) => api.get(`/issues/${id}`),
-  createIssue: (issueData) => {
-    // If issueData is FormData, we need to handle headers differently
-    if (issueData instanceof FormData) {
-      return api.post('/issues', issueData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-    }
-    return api.post('/issues', issueData);
-  },
+  createIssue: (issueData) => api.post('/issues', issueData),
   updateIssueStatus: (id, status) => api.patch(`/issues/${id}`, { status }),
 
   // Notices

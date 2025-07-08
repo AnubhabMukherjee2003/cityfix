@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { issueAPI } from '../services/api';
 import AdminIssueCard from './AdminIssueCard';
+import AdminIssueMap from './AdminIssueMap';
 import StatusFilter from './StatusFilter';
 import NoticeManager from './NoticeManager';
+import './AdminDashboard.css';
 import './AdminDashboard.css';
 
 function AdminDashboard({ adminUser, onLogout }) {
@@ -12,42 +14,37 @@ function AdminDashboard({ adminUser, onLogout }) {
   const [error, setError] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [activeTab, setActiveTab] = useState('issues');
+  const [issueView, setIssueView] = useState('list'); // 'list' or 'map'
 
-  const fetchIssues = useCallback(async () => {
+  useEffect(() => {
+    fetchIssues();
+  }, []);
+
+  useEffect(() => {
+    filterIssues();
+  }, [issues, selectedStatus]);
+
+  const fetchIssues = async () => {
     try {
       setLoading(true);
-      setError(null);
       const response = await issueAPI.getAllIssues();
       setIssues(response.data);
+      setError(null);
     } catch (err) {
+      setError('Failed to fetch issues. Please try again.');
       console.error('Error fetching issues:', err);
-      if (err.response?.status === 401) {
-        setError('Authentication failed. Please login again.');
-        // Trigger logout to redirect to login
-        setTimeout(() => onLogout(), 2000);
-      } else {
-        setError('Failed to fetch issues. Please try again.');
-      }
     } finally {
       setLoading(false);
     }
-  }, [onLogout]);
+  };
 
-  const filterIssues = useCallback(() => {
+  const filterIssues = () => {
     if (selectedStatus === 'All') {
       setFilteredIssues(issues);
     } else {
       setFilteredIssues(issues.filter(issue => issue.status === selectedStatus));
     }
-  }, [issues, selectedStatus]);
-
-  useEffect(() => {
-    fetchIssues();
-  }, [fetchIssues]);
-
-  useEffect(() => {
-    filterIssues();
-  }, [filterIssues]);
+  };
 
   const handleStatusUpdate = async (issueId, newStatus) => {
     try {
@@ -149,6 +146,21 @@ function AdminDashboard({ adminUser, onLogout }) {
               onStatusChange={setSelectedStatus}
               statusCounts={statusCounts}
             />
+            
+            <div className="view-toggle">
+              <button 
+                className={`view-btn ${issueView === 'list' ? 'active' : ''}`}
+                onClick={() => setIssueView('list')}
+              >
+                📋 List View
+              </button>
+              <button 
+                className={`view-btn ${issueView === 'map' ? 'active' : ''}`}
+                onClick={() => setIssueView('map')}
+              >
+                🗺️ Map View
+              </button>
+            </div>
           </div>
 
           <div className="issues-section">
@@ -157,20 +169,27 @@ function AdminDashboard({ adminUser, onLogout }) {
               ({filteredIssues.length})
             </h2>
             
-            {filteredIssues.length === 0 ? (
-              <div className="no-issues">
-                <p>No {selectedStatus.toLowerCase()} issues found.</p>
-              </div>
+            {issueView === 'list' ? (
+              filteredIssues.length === 0 ? (
+                <div className="no-issues">
+                  <p>No {selectedStatus.toLowerCase()} issues found.</p>
+                </div>
+              ) : (
+                <div className="admin-issues-list">
+                  {filteredIssues.map((issue) => (
+                    <AdminIssueCard
+                      key={issue._id}
+                      issue={issue}
+                      onStatusUpdate={handleStatusUpdate}
+                    />
+                  ))}
+                </div>
+              )
             ) : (
-              <div className="admin-issues-list">
-                {filteredIssues.map((issue) => (
-                  <AdminIssueCard
-                    key={issue._id}
-                    issue={issue}
-                    onStatusUpdate={handleStatusUpdate}
-                  />
-                ))}
-              </div>
+              <AdminIssueMap 
+                issues={filteredIssues}
+                onStatusUpdate={handleStatusUpdate}
+              />
             )}
           </div>
         </>
